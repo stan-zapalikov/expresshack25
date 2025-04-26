@@ -1,5 +1,15 @@
-## Important Links
+## About
 
-- [DevPost Submission](https://devpost.com/software/something-xamqoj)
-- [Google Doc (Project Planning & Notes)](https://docs.google.com/document/d/12lOvMBbsYR7UIPiqla-SmIp46N0ZOA_xN7GSWRTM6f0/edit?usp=sharing)
-- [Intro Slides (Adobe Express)](https://new.express.adobe.com/publishedV2/urn:aaid:sc:EU:9e270138-fb9a-4be2-b6db-8c22c3abbeef)
+This project has been created with _@adobe/create-ccweb-add-on_. As an example, this Add-on demonstrates how to get started with Add-on development using JavaScript with Document Sandbox Runtime.
+
+## Tools
+
+-   HTML
+-   CSS
+-   JavaScript
+
+## Setup
+
+1. To install the dependencies, run `npm install`.
+2. To build the application, run `npm run build`.
+3. To start the application, run `npm run start`.
