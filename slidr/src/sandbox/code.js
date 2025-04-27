@@ -97,15 +97,27 @@ function createSlide(text, bullets) {
 
 async function createSlides() {
     try {
-        // Create a rectangle geometry
+        // First create a title slide
         editor.documentRoot.pages.addPage({
             height: 1080,
             width: 1920
-          })
+        });
+        console.log('Created title page');
+        createSlide(slidesData.title, []); // Only title, no bullets on first slide
 
-        console.log('Navigated to new page');
+        // Now loop through all sections and slides
+        for (const section of slidesData.sections) {
+            for (const slide of section.slides) {
+                editor.documentRoot.pages.addPage({
+                    height: 1080,
+                    width: 1920
+                });
+                console.log(`Created page for: ${slide.slide_title}`);
+                createSlide(slide.slide_title, slide.bullet_points || []);
+            }
+        }
     } catch (error) {
-        console.error('Error adding new page');
+        console.error('Error adding new page:', error);
     }
 }
 
