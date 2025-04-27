@@ -1,5 +1,5 @@
 import addOnSandboxSdk from "add-on-sdk-document-sandbox";
-import { editor, colorUtils,fonts } from "express-document-sdk";
+import { editor, colorUtils,fonts,constants } from "express-document-sdk";
 
 const { runtime } = addOnSandboxSdk.instance;
 
@@ -60,8 +60,18 @@ let slidesData = {
     ]
 };
 
+function insertLineBreak(text) {
+    const words = text.split(' ');
+    const midIndex = Math.floor(words.length / 2);
+    // Join the first half and second half with a line break
+    const firstHalf = words.slice(0, midIndex).join(' ');
+    const secondHalf = words.slice(midIndex).join(' ');
+    return `${firstHalf}\n${secondHalf}`;
+}
+
 const themes = {
     clarityMinimal: {
+        backgroundColor: "#FFFFFF",
         titleSlide: {
             fontSize: 100,
             position: { x: 226, y: 287 },
@@ -83,41 +93,43 @@ const themes = {
             },
             bullets: {
                 fontSize: 34,
-                position: { x: 101, yStart: 413, yStep: 30 },
+                position: { x: 300, yStart: 413, yStep: 90 },
                 color: "#3D3D3D",
                 width: 1200
             }
         }
     },
     midnightMinimal: {
+        backgroundColor: "#181A1B",
         titleSlide: {
-            fontSize: 70,
-            position: { x: 400, y: 300 },
-            color: "#FFFFFF",
+            fontSize: 100,
+            position: { x: 226, y: 287 },
+            color: "#FFFFFF", // white for dark mode
             width: 1500
         },
         sectionSlide: {
-            fontSize: 60,
-            position: { x: 400, y: 300 },
-            color: "#CCCCCC",
+            fontSize: 90,
+            position: { x: 793, y: 624 },
+            color: "#FFFFFF", // white for dark mode
             width: 1500
         },
         bodySlide: {
             heading: {
-                fontSize: 50,
-                position: { x: 100, y: 100 },
-                color: "#FFFFFF",
+                fontSize: 80,
+                position: { x: 416, y: 100 },
+                color: "#FFFFFF", // white for dark mode
                 width: 1400
             },
             bullets: {
-                fontSize: 24,
-                position: { x: 100, yStart: 200, yStep: 40 },
-                color: "#AAAAAA",
+                fontSize: 34,
+                position: { x: 300, yStart: 413, yStep: 90 },
+                color: "#CCCCCC", // light gray for dark mode
                 width: 1200
             }
         }
     },
     executiveSlate: {
+        backgroundColor: "#F4F4F4",
         titleSlide: {
             fontSize: 68,
             position: { x: 400, y: 300 },
@@ -146,6 +158,7 @@ const themes = {
         }
     },
     brightPop: {
+        backgroundColor: "#FFF6F0",
         titleSlide: {
             fontSize: 72,
             position: { x: 400, y: 300 },
@@ -176,11 +189,11 @@ const themes = {
 };
 
 // THEME SELECTION
-const selectedTheme = themes.clarityMinimal; // Change this to switch themes
+const selectedTheme = themes.midnightMinimal; // Change this to switch themes
 
 function createTitle(text, slideType) {
     const textNode = editor.createText();
-    textNode.fullContent.text = text; // Set the text content first
+    textNode.fullContent.text = insertLineBreak(text); // Set the text content first
 
     let slideSettings;
     if (slideType === "title") {
@@ -194,11 +207,17 @@ function createTitle(text, slideType) {
         return;
     }
 
-    // Apply character styles including font, size, and color
     textNode.fullContent.applyCharacterStyles({
         fontSize: slideSettings.fontSize,
-        color: colorUtils.fromHex(slideSettings.color) // Set the text color to a HEX value
+        color: colorUtils.fromHex(slideSettings.color)
     });
+
+    // Center text for section slides
+    if (slideType === "section") {
+        textNode.fullContent.paragraphStyle = {
+            alignment: "center"
+        };
+    }
 
     const insertionParent = editor.context.insertionParent;
     textNode.setPositionInParent({ 
@@ -211,22 +230,41 @@ function createTitle(text, slideType) {
 
 function createBulletPoints(textArray) {
     for (let i = 0; i < textArray.length; i++) {
+        // Create the text node
         const textNode = editor.createText();
-        textNode.fullContent.text = textArray[i]; // Set the text content first
-
-        // Apply character styles including font size and color
+        textNode.fullContent.text = textArray[i];
         textNode.fullContent.applyCharacterStyles({
             fontSize: selectedTheme.bodySlide.bullets.fontSize,
-            color: colorUtils.fromHex(selectedTheme.bodySlide.bullets.color) // Set the text color to a HEX value
+            color: colorUtils.fromHex(selectedTheme.bodySlide.bullets.color)
         });
+        const x = selectedTheme.bodySlide.bullets.position.x;
+        const y = selectedTheme.bodySlide.bullets.position.yStart + (i * selectedTheme.bodySlide.bullets.position.yStep);
+        textNode.setPositionInParent({ x: x + 40, y: y }, textNode.topLeftLocal); // Text stays in the same place
 
-        const insertionParent = editor.context.insertionParent;
-        textNode.setPositionInParent({ 
-            x: selectedTheme.bodySlide.bullets.position.x, 
-            y: selectedTheme.bodySlide.bullets.position.yStart + (i * selectedTheme.bodySlide.bullets.position.yStep) 
-        }, textNode.topLeftLocal);
-        insertionParent.children.append(textNode);
+        // Create the bullet point circle (ellipse)
+        const circle = editor.createEllipse();
+        const circleRadius = 10; // You can adjust the bullet size here
+        circle.rx = circleRadius;
+        circle.ry = circleRadius;
+        circle.fill = editor.makeColorFill(colorUtils.fromHex(selectedTheme.bodySlide.bullets.color));
+        circle.setPositionInParent({ x: x - 150, y: (y + selectedTheme.bodySlide.bullets.fontSize / 2) - 10 }, { x: 0, y: 0 }); // Only the circle moves back
+
+        // Append both nodes to the current insertion parent
+        editor.context.insertionParent.children.append(circle, textNode);
     }
+}
+
+function setArtboardBackgroundColor(artboard, hexColor) {
+    if (!artboard) {
+        console.error("No artboard found to set background color.");
+        return;
+    }
+    const backgroundRectangle = editor.createRectangle();
+    backgroundRectangle.width = artboard.boundsLocal.width;
+    backgroundRectangle.height = artboard.boundsLocal.height;
+    backgroundRectangle.fill = editor.makeColorFill(colorUtils.fromHex(hexColor));
+    backgroundRectangle.translation = { x: 0, y: 0 };
+    artboard.children.append(backgroundRectangle);
 }
 
 function createSlide(text, bullets) {
@@ -244,23 +282,30 @@ function createSlide(text, bullets) {
 async function createSlides() {
     try {
         // First create a title slide
-        editor.documentRoot.pages.addPage({
+        const titlePage = editor.documentRoot.pages.addPage({
             height: 1080,
             width: 1920
         });
-        console.log('Created title page');
-        createTitle(slidesData.title, "title"); // Specify slide type as "title"
-        
+        let titleArtboard = titlePage.artboards[0];
+        if (!titleArtboard) {
+            titleArtboard = titlePage.artboards.addArtboard();
+        }
+        setArtboardBackgroundColor(titleArtboard, selectedTheme.backgroundColor);
+        createTitle(slidesData.title, "title");
+
         // Now loop through all sections and slides
         for (const section of slidesData.sections) {
             for (const slide of section.slides) {
-                editor.documentRoot.pages.addPage({
+                const newPage = editor.documentRoot.pages.addPage({
                     height: 1080,
                     width: 1920
                 });
-                console.log(`Created page for: ${slide.slide_title}`);
-          
-                createTitle(slide.slide_title, slide.slide_type); // Use slide_type to determine settings
+                let artboard = newPage.artboards[0];
+                if (!artboard) {
+                    artboard = newPage.artboards.addArtboard();
+                }
+                setArtboardBackgroundColor(artboard, selectedTheme.backgroundColor);
+                createTitle(slide.slide_title, slide.slide_type);
                 createBulletPoints(slide.bullet_points || []);
             }
         }
