@@ -98,20 +98,14 @@ function createSlide(text, bullets) {
 async function createSlides() {
     try {
         // Create a rectangle geometry
-        const rectangle = editor.createRectangle();
-        rectangle.width = 800; // Set the width of the rectangle
-        rectangle.height = 600; // Set the height of the rectangle
+        editor.documentRoot.pages.addPage({
+            height: 1080,
+            width: 1920
+          })
 
-        // Create a new page using the rectangle as input
-        const newPage = await editor.addPage({inputGeometry: rectangle});
-
-        console.log('New page added:', newPage);
-
-        // Navigate to the newly created page
-        editor.context.currentPage = newPage;
-        console.log('Navigated to new page:', newPage);
+        console.log('Navigated to new page');
     } catch (error) {
-        console.error('Error adding new page:', error);
+        console.error('Error adding new page');
     }
 }
 
