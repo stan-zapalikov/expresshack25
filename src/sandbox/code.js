@@ -4,7 +4,7 @@ import { editor } from "express-document-sdk";
 // Get the document sandbox runtime.
 const { runtime } = addOnSandboxSdk.instance;
 
-/*const themes = {
+const themes = {
     clarityMinimal: {
         fontSize: {
             title: 50,
@@ -355,8 +355,7 @@ function start() {
     // APIs to be exposed to the UI runtime
     // i.e., to the `index.html` file of this add-on.
     const sandboxApi = {
-        //createPresentationSlides: ()=> {createTitle(presentation.title, themes.clarityMinimal);},
-        createPresentationSlides: () => console.log("Creating presentation slides..."),
+        createPresentationSlides: ()=> {createTitle(presentation.title, themes.clarityMinimal);},
     };
 
     // Expose `sandboxApi` to the UI runtime.

@@ -81,6 +81,10 @@
       }
     };
 
+    $("go-button")?.addEventListener("click", async () => {
+      await sandbox.createPresentationSlides();
+    })
+
     $("createRectangle")?.addEventListener("click", async () => {
       await sandbox.createRectangle();
     });
