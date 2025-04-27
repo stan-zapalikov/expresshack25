@@ -5,6 +5,11 @@ import { editor, colorUtils } from "express-document-sdk";
 const { runtime } = addOnSandboxSdk.instance;
 
 const placeholderTitle = "Title Placeholder";
+const bulletsPlaceholder = [
+    "Bullet 1 Placeholder",
+    "Bullet 2 Placeholder",
+    "Bullet 3 Placeholder"
+];
 
 function createTitle(text) {
     const textNode = editor.createText();
@@ -21,12 +26,38 @@ function createTitle(text) {
     insertionParent.children.append(textNode);
 }
 
+function createBulletPoints(textArray) {
+    for (let i = 0; i < textArray.length; i++) {
+        const textNode = editor.createText();
+        textNode.fullContent.text = textArray[i]; // Set the text content first
+
+        // Apply character styles including font size and color
+        textNode.fullContent.applyCharacterStyles({
+            fontSize: 20,
+            color: colorUtils.fromHex("#000000") // Set the text color to a HEX value
+        });
+
+        const insertionParent = editor.context.insertionParent;
+        textNode.setPositionInParent({ x: 100, y: 200 + (i * 30) }, textNode.topLeftLocal);
+        insertionParent.children.append(textNode);
+    }
+
+}
+
+function createSlide(text, bullets) {
+    createTitle(text);
+    createBulletPoints(bullets);
+}
+
+function createSlides() {
+    
+}
 
 function start() {
     // APIs to be exposed to the UI runtime
     // i.e., to the `index.html` file of this add-on.
     const sandboxApi = {
-        createRectangle: () => {createTitle(placeholderTitle)}
+        createRectangle: () => {createSlide(placeholderTitle, bulletsPlaceholder);},
     };
 
     // Expose `sandboxApi` to the UI runtime.
