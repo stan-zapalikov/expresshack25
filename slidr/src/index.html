@@ -158,7 +158,7 @@
 
     /* Style for loading GIF */
     #loading {
-      display: block;
+      display: none;
       margin: 16px auto;
       max-width: 100%;
     }
@@ -176,25 +176,25 @@
 
     <p id="file-name"></p>
   </div>
-
   <div class="template-grid">
-    <div class="template-item" data-template="modern">
+    <div class="template-item" data-template="clarityMinimal">
       <img src="https://picsum.photos/seed/modern/400/400" alt="Template Modern">
       <p>Clarity Minimal</p>
     </div>
-    <div class="template-item" data-template="corporate">
+    <div class="template-item" data-template="midnightMinimal">
       <img src="https://picsum.photos/seed/corporate/400/400" alt="Template Corporate">
       <p>Midnight Minimal</p>
     </div>
-    <div class="template-item" data-template="creative">
+    <div class="template-item" data-template="executiveSlate">
       <img src="https://picsum.photos/seed/creative/400/400" alt="Template Creative">
       <p>Executive Slate</p>
     </div>
-    <div class="template-item" data-template="minimal">
+    <div class="template-item" data-template="brightPop">
       <img src="https://picsum.photos/seed/minimal/400/400" alt="Template Minimal">
       <p>Bright Pop</p>
     </div>
   </div>
+  
 
   <!-- Checkbox for Add Images -->
   <div id="addImagesContainer">
@@ -211,21 +211,27 @@
     const templateItems = document.querySelectorAll('.template-item');
     const goButton = document.getElementById('goButton');
     const uploadButton = document.getElementById('uploadButton');
-    let selectedTheme = null;
-
+  
     templateItems.forEach(item => {
       item.addEventListener('click', () => {
         templateItems.forEach(i => i.classList.remove('selected'));
         item.classList.add('selected');
-        selectedTheme = item.getAttribute('data-template');
+        const selectedTheme = item.getAttribute('data-template');
         goButton.disabled = false;
+        
+        // Dispatch a custom event so index.js can listen
+        window.dispatchEvent(new CustomEvent('selectedThemeChanged', {
+          detail: { selectedTheme }
+        }));
+  
         console.log('Selected Theme:', selectedTheme);
       });
     });
-
+  
     uploadButton.addEventListener('click', () => {
       console.log('Upload button clicked.');
     });
   </script>
+  
 </body>
 </html>
