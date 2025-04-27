@@ -77,6 +77,35 @@ const themes = {
     },
 };
 
+function createTitle(text, theme) {
+    const textNode = editor.createText();
+    textNode.fullContent.text = text;
+    textNode.fullContent.applyCharacterStyles({ fontSize: theme.fontSize.title });
+
+    const insertionParent = editor.context.insertionParent;
+    textNode.fill = editor.makeColorFill(theme.color.title);
+
+    textNode.setPositionInParent({ x: 50, y: theme.spacing.titleTopMargin }, textNode.topLeftLocal);
+    insertionParent.children.append(textNode);
+}
+
+function createBulletPoints(points, theme) {
+    const insertionParent = editor.context.insertionParent;
+    let y = 200; // Start lower than the title
+
+    points.forEach((point, index) => {
+        const bullet = editor.createText();
+        bullet.fullContent.text = `• ${point}`;
+        bullet.fullContent.applyCharacterStyles({ fontSize: theme.fontSize.bullet });
+        bullet.fill = editor.makeColorFill(theme.color.bullet);
+
+        bullet.setPositionInParent({ x: 80, y: y + index * theme.spacing.bulletSpacing }, bullet.topLeftLocal);
+        insertionParent.children.append(bullet);
+    });
+}
+
+
+
 const presentation = {
     title: "Gender and Society in East Asia: Early Modern Period",
     sections: [
