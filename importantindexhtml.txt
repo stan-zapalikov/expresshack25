@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>PDF to Presentation</title>
+
+  <script src="https://jspm.dev/@spectrum-web-components/bundle"></script>
+  <script type="module" src="./ui/index.js"></script>
+
+  <!-- Load Source Sans Pro font -->
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Source Sans Pro', sans-serif;
+      padding: 16px;
+      background: var(--spectrum-global-color-gray-50);
+      color: var(--spectrum-global-color-gray-900);
+      max-width: 400px;
+      margin: auto;
+    }
+
+    .upload-container {
+      margin-bottom: 24px;
+      text-align: center; /* Center everything inside */
+    }
+
+    #pdf-upload { display: none; }
+
+    #file-name {
+      display: none;
+      margin-top: 8px;
+      font-size: 12px;
+      background: var(--spectrum-global-color-gray-100);
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+
+    #subtext {
+      display: block;
+      margin-top: 12px; /* space after button */
+      font-size: 13px;
+      color: #666;
+      text-align: center;
+    }
+
+    .error {
+      color: var(--spectrum-global-color-red-600);
+      font-size: 12px;
+      margin-top: 4px;
+    }
+
+    #progress-bar { display: none; }
+
+    .template-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .template-item {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      background: var(--spectrum-global-color-gray-100);
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: box-shadow 0.3s, transform 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .template-item img {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 12px;
+      z-index: 1;
+      transition: transform 0.3s;
+    }
+
+    .template-item p {
+      position: absolute;
+      z-index: 2;
+      color: white;
+      font-weight: 600;
+      font-size: 16px;
+      text-shadow: 0 0 5px rgba(0,0,0,0.7);
+      text-align: center;
+      padding: 8px;
+      pointer-events: none;
+    }
+
+    .template-item:hover {
+      box-shadow: 0 0 12px 4px rgba(20, 115, 230, 0.5);
+      transform: scale(1.02);
+    }
+
+    .template-item.selected {
+      box-shadow: 0 0 16px 6px rgba(20, 115, 230, 0.8);
+      transform: scale(1.04);
+    }
+
+    /* Modern button styles */
+    .upload-button, .convert-button {
+      padding: 16px 24px;
+      margin-top: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      text-align: center;
+      color: #fff;
+      background: linear-gradient(135deg, #1473e6, #005fcc);
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s, box-shadow 0.3s, transform 0.2s;
+      font-family: 'Source Sans Pro', sans-serif;
+      display: inline-block; /* Important: for centering */
+    }
+
+    .upload-button:hover, .convert-button:hover {
+      background: linear-gradient(135deg, #0d66d0, #004bb5);
+      box-shadow: 0px 4px 10px rgba(0,0,0,0.15);
+      transform: translateY(-2px);
+    }
+
+    .convert-button {
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    .convert-button:disabled {
+      background: #c1c1c1;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="upload-container">
+    <label for="pdf-upload" class="upload-button" id="upload-button">Upload File</label>
+    <input id="pdf-upload" type="file" accept=".pdf, .docx, .txt" />
+    <p id="subtext">Files should be PDF, DOCX, or TXT.</p>
+    <p id="file-name"></p>
+  </div>
+
+  <div class="template-grid">
+    <div class="template-item" data-template="modern">
+      <img src="https://picsum.photos/seed/modern/400/400" alt="Template Modern">
+      <p>Clarity Minimal</p>
+    </div>
+    <div class="template-item" data-template="corporate">
+      <img src="https://picsum.photos/seed/corporate/400/400" alt="Template Corporate">
+      <p>Midnight Minimal</p>
+    </div>
+    <div class="template-item" data-template="creative">
+      <img src="https://picsum.photos/seed/creative/400/400" alt="Template Creative">
+      <p>Executive Slate</p>
+    </div>
+    <div class="template-item" data-template="minimal">
+      <img src="https://picsum.photos/seed/minimal/400/400" alt="Template Minimal">
+      <p>Bright Pop</p>
+    </div>
+  </div>
+
+  <button id="go-button" class="convert-button" disabled>Convert to Presentation</button>
+  <sp-progress-bar id="progress-bar" label="Converting..." progress="0" variant="positive"></sp-progress-bar>
+  <p id="error-message" class="error"></p>
+
+  <!-- Script to manage template selection -->
+  <script>
+    const templateItems = document.querySelectorAll('.template-item');
+    const goButton = document.getElementById('go-button');
+
+    templateItems.forEach(item => {
+      item.addEventListener('click', () => {
+        templateItems.forEach(i => i.classList.remove('selected'));
+        item.classList.add('selected');
+        goButton.disabled = false;
+      });
+    });
+  </script>
+</body>
+</html>
