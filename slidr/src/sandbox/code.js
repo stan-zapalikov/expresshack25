@@ -1,7 +1,6 @@
 import addOnSandboxSdk from "add-on-sdk-document-sandbox";
 import { editor, colorUtils } from "express-document-sdk";
 
-// Get the document sandbox runtime.
 const { runtime } = addOnSandboxSdk.instance;
 
 const placeholderTitle = "Title Placeholder";
@@ -117,15 +116,14 @@ async function createSlides() {
 }
 
 function start() {
-    // APIs to be exposed to the UI runtime
-    // i.e., to the `index.html` file of this add-on.
     const sandboxApi = {
-        createFinalSlides: async () => {await createSlides(); },
-
-    
+        
+        generatePresentation(outline, themeUsed, addImages) {
+            console.log("Received outline:", outline);
+            console.log("Theme:", themeUsed);
+            console.log("Add Images?", addImages);}
     };
 
-    // Expose `sandboxApi` to the UI runtime.
     runtime.exposeApi(sandboxApi);
 }
 
