@@ -72,6 +72,7 @@ function insertLineBreak(text) {
 const themes = {
     clarityMinimal: {
         backgroundColor: "#FFFFFF",
+        font: "AGaramondPro-Regular",
         titleSlide: {
             fontSize: 100,
             position: { x: 226, y: 287 },
@@ -189,7 +190,18 @@ const themes = {
 };
 
 // THEME SELECTION
-const selectedTheme = themes.brightPop; // Change this to switch themes
+let selectedTheme = themes.clarityMinimal; // Default theme
+
+// Listen for theme selection event from UI
+if (typeof window !== 'undefined') {
+    window.addEventListener('selectedThemeChanged', (event) => {
+        const themeKey = event.detail.selectedTheme;
+        if (themes[themeKey]) {
+            selectedTheme = themes[themeKey];
+            console.log('Theme changed to:', themeKey);
+        }
+    });
+}
 
 function createTitle(text, slideType) {
     const textNode = editor.createText();
@@ -205,6 +217,15 @@ function createTitle(text, slideType) {
     } else {
         console.error("Invalid slide type provided: ", slideType);
         return;
+    }
+
+    // Apply font for clarityMinimal
+    if (selectedTheme.font) {
+        fonts.fromPostscriptName(selectedTheme.font).then(font => {
+            if (font) {
+                textNode.fullContent.applyCharacterStyles({ font: font });
+            }
+        });
     }
 
     textNode.fullContent.applyCharacterStyles({
@@ -316,8 +337,12 @@ async function createSlides() {
 
 function start() {
     const sandboxApi = {
-        generatePresentation: (newSlidesData) => {
+        generatePresentation: (newSlidesData, themeKey, addImages) => {
             slidesData = newSlidesData;
+            if (themeKey && themes[themeKey]) {
+                selectedTheme = themes[themeKey];
+                console.log('Theme set from UI:', themeKey);
+            }
             createSlides();
         }
     };
