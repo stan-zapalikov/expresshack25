@@ -50,7 +50,8 @@ const slidesData = {
 };
 
 export async function searchPexels(query) {
-    const url = `https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=1`;
+    const url = `https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=1&orientation=landscape`;
+
 
     try {
         const response = await fetch(url, {
@@ -74,6 +75,24 @@ export async function searchPexels(query) {
         return null;
     }
 }
+
+async function enrichSlidesWithImages(slidesOutline) {
+    for (const section of slidesOutline.sections) {
+        for (const slide of section.slides) {
+            if (slide.accompanyingImageDescription && slide.accompanyingImageDescription.trim() !== "") {
+                const imageUrl = await searchPexels(slide.accompanyingImageDescription);
+                if (imageUrl) {
+                    slide.accompanyingImageUrl = imageUrl;
+                    console.log(`Found image for "${slide.slide_title}": ${imageUrl}`);
+                } else {
+                    console.warn(`No image found for "${slide.slide_title}".`);
+                }
+            }
+        }
+    }
+}
+
+
 
 addOnUISdk.ready.then(async () => {
     console.log("addOnUISdk is ready for use.");
@@ -283,7 +302,9 @@ addOnUISdk.ready.then(async () => {
     
             //const outline = slidesData; // Using static test data for now
             console.log("Generated Outline:", outline);
-    
+            await enrichSlidesWithImages(outline);  // <- block here, wait for all image urls to be added
+
+            console.log("Generated Outline with images:", outline);
             await sandboxProxy.generatePresentation(outline, themeUsed, addImages);
             showOutline(outline)
         } catch (error) {
