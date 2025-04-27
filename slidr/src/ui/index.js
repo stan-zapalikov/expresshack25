@@ -1,6 +1,54 @@
 import addOnUISdk from "https://new.express.adobe.com/static/add-on-sdk/sdk.js";
 import { OPENAI_API_KEY, OPENAI_ASSISTANT_ID,PEXELS_API_KEY} from "./env.js";
 
+const slidesData = {
+    "title": "Historical Changes in East Asia's Social and Economic Landscapes",
+    "sections": [
+        {
+            "section_title": "Economic Transformations",
+            "slides": [
+                {
+                    "slide_type": "section",
+                    "slide_title": "Economic Transformations",
+                    "bullet_points": [],
+                    "accompanyingImageDescription": "markets, merchants, trade, agriculture, currency"
+                },
+                {
+                    "slide_type": "body",
+                    "slide_title": "Agricultural Changes",
+                    "bullet_points": [
+                        "New agricultural techniques increased yields",
+                        "Uniform Land Tax Law introduced after tax records were lost",
+                        "Tax payments could be made in rice, coin, or cotton"
+                    ],
+                    "accompanyingImageDescription": "rice fields, cotton plants, farmers working"
+                }
+            ]
+        },
+        {
+            "section_title": "Societal Shifts",
+            "slides": [
+                {
+                    "slide_type": "section",
+                    "slide_title": "Societal Shifts",
+                    "bullet_points": [],
+                    "accompanyingImageDescription": "social gatherings, diverse community, educational settings"
+                },
+                {
+                    "slide_type": "body",
+                    "slide_title": "Gender Roles and Education",
+                    "bullet_points": [
+                        "Women had roles in farming and business",
+                        "Separate educational paths for boys and girls",
+                        "Elite women learned Confucian ethics and poetry"
+                    ],
+                    "accompanyingImageDescription": "school scenes, male and female students, books"
+                }
+            ]
+        }
+    ]
+};
+
 export async function searchPexels(query) {
     const url = `https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=1`;
 
@@ -220,8 +268,11 @@ addOnUISdk.ready.then(async () => {
         loadingGif.style.display = 'block';
 
         try {
-            const fileId = await uploadFileToOpenAI(rawUpload);
-            const outline = await generateOutline(fileId);
+           // const fileId = await uploadFileToOpenAI(rawUpload);
+            //const outline = await generateOutline(fileId);
+            //outline = JSON.parse(outline)
+            
+            const outline = slidesData
 
             console.log("Generated Outline:", outline);
 

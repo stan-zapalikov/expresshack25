@@ -28,9 +28,10 @@
     #pdf-upload { display: none; }
 
     #file-name {
-      display: none;
+      display: block;
       margin-top: 8px;
-      font-size: 12px;
+      font-size: 14px;
+      color: black;
       background: var(--spectrum-global-color-gray-100);
       padding: 4px 8px;
       border-radius: 4px;
@@ -38,7 +39,7 @@
 
     #subtext {
       display: block;
-      margin-top: 12px;
+      margin-top: 8px;
       font-size: 13px;
       color: #666;
       text-align: center;
@@ -53,47 +54,47 @@
     #progress-bar { display: none; }
 
     .template-grid {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-        margin-bottom: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 16px;
     }
 
     .template-item {
-        position: relative;
-        width: 100%;
-        height: 100px;
-        background: var(--spectrum-global-color-gray-100);
-        border-radius: 12px;
-        overflow: hidden;
-        cursor: pointer;
-        transition: box-shadow 0.3s, transform 0.3s;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+      position: relative;
+      width: 100%;
+      height: 100px;
+      background: var(--spectrum-global-color-gray-100);
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: box-shadow 0.3s, transform 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .template-item img {
-        position: absolute;
-        top: 0; left: 0; right: 0; bottom: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        border-radius: 12px;
-        z-index: 1;
-        transition: transform 0.3s;
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 12px;
+      z-index: 1;
+      transition: transform 0.3s;
     }
 
     .template-item p {
-        position: relative;
-        z-index: 2;
-        color: white;
-        font-weight: 600;
-        font-size: 16px;
-        text-shadow: 0 0 5px rgba(0,0,0,0.7);
-        text-align: center;
-        padding: 8px;
-        pointer-events: none;
+      position: relative;
+      z-index: 2;
+      color: white;
+      font-weight: 600;
+      font-size: 16px;
+      text-shadow: 0 0 5px rgba(0,0,0,0.7);
+      text-align: center;
+      padding: 8px;
+      pointer-events: none;
     }
 
     .template-item:hover {
@@ -139,7 +140,6 @@
       box-shadow: none;
     }
 
-    /* Styles for addImages checkbox */
     #addImagesContainer {
       margin: 20px 0 10px 0;
       display: flex;
@@ -156,7 +156,6 @@
       font-size: 14px;
     }
 
-    /* Style for loading GIF */
     #loading {
       display: none;
       margin: 16px auto;
@@ -166,16 +165,15 @@
 </head>
 
 <body>
+
   <div class="upload-container">
-    <label for="pdf-upload" class="upload-button" id="uploadButton">Upload File</label> <!-- updated id -->
+    <label for="pdf-upload" class="upload-button" id="uploadButton">Upload File</label>
     <input id="pdf-upload" type="file" accept=".pdf, .docx, .txt" />
+    <p id="file-name"></p> <!-- file name will appear here -->
     <p id="subtext">Files should be PDF, DOCX, or TXT.</p>
-
-    <!-- Loading GIF below upload button -->
     <img id="loading" src="https://i.pinimg.com/originals/3e/f0/e6/3ef0e69f3c889c1307330c36a501eb12.gif" alt="Loading GIF">
-
-    <p id="file-name"></p>
   </div>
+
   <div class="template-grid">
     <div class="template-item" data-template="clarityMinimal">
         <img src="./clarity minimal.png" alt="Clarity Minimal Template">
@@ -190,11 +188,9 @@
         <img src="./Bright Pop.png" alt="Template Creative">
     </div>
   </div>
-  
 
-  <!-- Checkbox for Add Images -->
   <div id="addImagesContainer">
-    <input type="checkbox" id="addImages" />
+    <input type="checkbox" id="addImages" checked /> <!-- checked by default now -->
     <label for="addImages" id="addImagesLabel">Add Images</label>
   </div>
 
@@ -207,27 +203,50 @@
     const templateItems = document.querySelectorAll('.template-item');
     const goButton = document.getElementById('goButton');
     const uploadButton = document.getElementById('uploadButton');
-  
+    const fileInput = document.getElementById('pdf-upload');
+    const fileNameDisplay = document.getElementById('file-name');
+
+    let uploadedFile = null;
+
+    // Template selection
     templateItems.forEach(item => {
       item.addEventListener('click', () => {
         templateItems.forEach(i => i.classList.remove('selected'));
         item.classList.add('selected');
         const selectedTheme = item.getAttribute('data-template');
-        goButton.disabled = false;
-        
-        // Dispatch a custom event so index.js can listen
+        if (uploadedFile) goButton.disabled = false;
+
         window.dispatchEvent(new CustomEvent('selectedThemeChanged', {
           detail: { selectedTheme }
         }));
-  
+
         console.log('Selected Theme:', selectedTheme);
       });
     });
-  
+
+    // Handle file upload
+    fileInput.addEventListener('change', () => {
+      if (fileInput.files.length > 0) {
+        uploadedFile = fileInput.files[0];
+        fileNameDisplay.textContent = uploadedFile.name;
+        fileNameDisplay.style.color = 'black';
+        if (document.querySelector('.template-item.selected')) {
+          goButton.disabled = false;
+        }
+      } else {
+        uploadedFile = null;
+        fileNameDisplay.textContent = '';
+        goButton.disabled = true;
+      }
+    });
+
     uploadButton.addEventListener('click', () => {
       console.log('Upload button clicked.');
     });
+
+    // Make sure addImages is checked on load
+    document.getElementById('addImages').checked = true;
   </script>
-  
+
 </body>
 </html>
