@@ -3,6 +3,8 @@ import { editor, colorUtils,fonts } from "express-document-sdk";
 
 const { runtime } = addOnSandboxSdk.instance;
 
+
+
 const placeholderTitle = "Title Placeholder";
 const bulletsPlaceholder = [
     "Bullet 1 Placeholder",
@@ -10,7 +12,7 @@ const bulletsPlaceholder = [
     "Bullet 3 Placeholder"
 ];
 
-const slidesData = {
+let slidesData = {
     "title": "Historical Changes in East Asia's Social and Economic Landscapes",
     "sections": [
         {
@@ -128,7 +130,11 @@ async function createSlides() {
 function start() {
     const sandboxApi = {
         
-        generatePresentation: () => {createSlides()}
+        generatePresentation: (newSlidesData) => {
+            slidesData = newSlidesData;
+            createSlides();
+        }
+        
     };
 
     runtime.exposeApi(sandboxApi);

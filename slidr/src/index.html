@@ -195,6 +195,7 @@
   <!-- Disclosure screen -->
   <div id="disclosure-screen" class="visible">
     <h1>Responsible AI Disclosure</h1>
+    <p>Please ask yourself these questions:</p>
     <div id="disclosure">
       <ol>
         <li>When using AI tools, you are responsible for how it is used and its impact.</li>
@@ -209,7 +210,11 @@
     </div>
     <button id="acceptButton">Accept</button>
   </div>
-
+    <!-- Outline Screen -->
+    <div id="outline-screen" style="display: none;">
+        <h1 style="text-align: center;">Generated Outline</h1>
+        <div id="outline-content" style="text-align: left; margin-top: 20px;"></div>
+      </div>    
   <!-- Main functional screen -->
   <div id="main-screen">
     <div class="upload-container">
@@ -220,6 +225,7 @@
       <img id="loading" src="https://i.pinimg.com/originals/3e/f0/e6/3ef0e69f3c889c1307330c36a501eb12.gif" alt="Loading GIF">
     </div>
 
+  
     <div class="template-grid">
       <div class="template-item" data-template="clarityMinimal">
           <img src="./clarity minimal.png" alt="Clarity Minimal Template">
@@ -299,23 +305,63 @@
 
     // Convert button click
     goButton.addEventListener('click', () => {
-      if (!uploadedFile) {
-        alert("Please upload a file first.");
-        return;
-      }
-
       loadingImage.style.display = "block";
       goButton.disabled = true;
-      goButton.textContent = "Processing...";
+      goButton.textContent = "Processing...";})
+      
 
-      // Simulate conversion for now
-      setTimeout(() => {
-        loadingImage.style.display = "none";
-        goButton.disabled = false;
-        goButton.textContent = "Convert to Presentation";
-        alert("Conversion completed!");
-      }, 3000);
+
+      function showOutline(outline) {
+  // Hide everything else
+  document.getElementById('disclosure-screen').style.display = 'none';
+  document.getElementById('main-screen').style.display = 'none';
+  document.getElementById('loading').style.display = 'none';
+
+  // Show outline screen
+  console.log("running outline");
+  document.getElementById('outline-screen').style.display = "block";
+
+  const contentDiv = document.getElementById('outline-content');
+  contentDiv.innerHTML = ""; // Clear previous contents
+
+  let html = "";
+  let slideNumber = 1; // Start numbering at 1
+
+  // Title Slide
+  if (outline.title) {
+    html += `<p><strong>${slideNumber}.</strong> ${outline.title}</p>`;
+    slideNumber++;
+  }
+
+  // Loop through sections and slides
+  if (outline.sections && Array.isArray(outline.sections)) {
+    outline.sections.forEach(section => {
+
+      // Section title slide
+      html += `<p><strong>${slideNumber}.</strong> ${section.section_title}</p>`;
+      slideNumber++;
+
+      if (section.slides && Array.isArray(section.slides)) {
+        section.slides.forEach(slide => {
+          if (slide.slide_type === "body") {
+            html += `<p style="margin-left: 20px;"><strong>${slideNumber}.</strong> ${slide.slide_title}</p>`;
+            slideNumber++;
+          }
+        });
+      }
     });
+  }
+
+  // End Slide (optional, if present)
+  if (outline.end_slide) {
+    html += `<p><strong>${slideNumber}.</strong> ${outline.end_slide.slide_title}</p>`;
+    slideNumber++;
+  }
+
+  contentDiv.innerHTML = html;
+}
+
+
   </script>
 
 </body>
