@@ -299,23 +299,9 @@
 
     // Convert button click
     goButton.addEventListener('click', () => {
-      if (!uploadedFile) {
-        alert("Please upload a file first.");
-        return;
-      }
-
       loadingImage.style.display = "block";
       goButton.disabled = true;
-      goButton.textContent = "Processing...";
-
-      // Simulate conversion for now
-      setTimeout(() => {
-        loadingImage.style.display = "none";
-        goButton.disabled = false;
-        goButton.textContent = "Convert to Presentation";
-        alert("Conversion completed!");
-      }, 3000);
-    });
+      goButton.textContent = "Processing...";})
   </script>
 
 </body>

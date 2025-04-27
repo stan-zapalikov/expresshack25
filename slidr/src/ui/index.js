@@ -261,9 +261,20 @@ addOnUISdk.ready.then(async () => {
 
     goButton.addEventListener("click", async (event) => {
         console.log("Clicked Convert!");
+        uploadInput.style.display = 'none';
+        document.querySelector('.template-grid').style.display = 'none';
+        addImagesCheckbox.parentElement.style.display = 'none';
+        goButton.style.display = 'none';
+        document.getElementById('uploadButton').style.display = 'none';
+        document.getElementById('file-name').style.display = 'none';
+        document.getElementById('subtext').style.display = 'none';
+        document.getElementById('addImagesLabel').style.display = 'none';
     
-        document.getElementById('main-screen').style.display = 'none'; // Hide main screen
-        loadingGif.style.display = 'block'; // Show loading GIF
+        // Show loading gif
+        loadingGif.style.display = 'block';
+        //document.getElementById('main-screen').style.display = 'none'; 
+        
+        
     
         try {
             // const fileId = await uploadFileToOpenAI(rawUpload);
@@ -278,6 +289,7 @@ addOnUISdk.ready.then(async () => {
             console.error("Error generating outline:", error);
         }
     });
+    
     
 
     goButton.disabled = true;
