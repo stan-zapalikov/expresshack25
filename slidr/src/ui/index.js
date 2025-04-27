@@ -1,5 +1,31 @@
 import addOnUISdk from "https://new.express.adobe.com/static/add-on-sdk/sdk.js";
-import { OPENAI_API_KEY, OPENAI_ASSISTANT_ID } from "./env.js";
+import { OPENAI_API_KEY, OPENAI_ASSISTANT_ID,PEXELS_API_KEY} from "./env.js";
+
+export async function searchPexels(query) {
+    const url = `https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=1`;
+
+    try {
+        const response = await fetch(url, {
+            headers: {
+                Authorization: PEXELS_API_KEY
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        if (data.photos && data.photos.length > 0) {
+            return data.photos[0].src.original;
+        } else {
+            return null;
+        }
+    } catch (error) {
+        console.error('Error fetching from Pexels:', error);
+        return null;
+    }
+}
 
 addOnUISdk.ready.then(async () => {
     console.log("addOnUISdk is ready for use.");
@@ -203,6 +229,8 @@ addOnUISdk.ready.then(async () => {
         } catch (error) {
             console.error("Error generating outline:", error);
         }
+
+
     });
 
     goButton.disabled = true;
