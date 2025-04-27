@@ -1,5 +1,5 @@
 import addOnSandboxSdk from "add-on-sdk-document-sandbox";
-import { editor, colorUtils } from "express-document-sdk";
+import { editor, colorUtils,fonts } from "express-document-sdk";
 
 const { runtime } = addOnSandboxSdk.instance;
 
@@ -60,19 +60,23 @@ let slidesData = {
     ]
 };
 
-function createTitle(text) {
+async function createTitle(text) {
     const textNode = editor.createText();
     textNode.fullContent.text = text; // Set the text content first
 
-    // Apply character styles including font size and color
+    // Get the font object for Adobe Garamond Pro
+
+
+    // Apply character styles including font, size, and color
     textNode.fullContent.applyCharacterStyles({
-        fontSize: 50,
-        color: colorUtils.fromHex("#E1A141") // Set the text color to a HEX value
+        fontSize: 97,
+        color: colorUtils.fromHex("#000000")
     });
 
     const insertionParent = editor.context.insertionParent;
     textNode.setPositionInParent({ x: 100, y: 150 }, textNode.topLeftLocal);
     insertionParent.children.append(textNode);
+    console.log("Text Node Added: ", textNode);
 }
 
 function createBulletPoints(textArray) {
@@ -82,8 +86,8 @@ function createBulletPoints(textArray) {
 
         // Apply character styles including font size and color
         textNode.fullContent.applyCharacterStyles({
-            fontSize: 20,
-            color: colorUtils.fromHex("#000000") // Set the text color to a HEX value
+            fontSize: 34,
+            color: colorUtils.fromHex("#3D3D3D") // Set the text color to a HEX value
         });
 
         const insertionParent = editor.context.insertionParent;
