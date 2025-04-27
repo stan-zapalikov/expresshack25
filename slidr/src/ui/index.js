@@ -67,7 +67,7 @@ addOnUISdk.ready.then(async () => {
         await new Promise(resolve => setTimeout(resolve, 1000));
 
         // Call your sandbox function (replace with your actual function)
-        await sandboxProxy.createRectangle();
+        await sandboxProxy.createFinalSlides();
 
         // Hide loading gif once done (optional — or leave visible if still processing)
         loadingGif.style.display = 'none';
