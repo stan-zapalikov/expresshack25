@@ -7,7 +7,6 @@
   <script src="https://jspm.dev/@spectrum-web-components/bundle"></script>
   <script type="module" src="./ui/index.js"></script>
 
-  <!-- Load Source Sans Pro font -->
   <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600&display=swap" rel="stylesheet">
 
   <style>
@@ -18,6 +17,51 @@
       color: var(--spectrum-global-color-gray-900);
       max-width: 400px;
       margin: auto;
+    }
+
+    #disclosure-screen, #main-screen {
+      display: none;
+     
+    }
+
+    .visible {
+      display: block;
+    }
+
+    #disclosure {
+      font-size: 14px;
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+
+    #disclosure-screen {
+  display: block;
+  text-align: center;
+}
+#disclosure ol {
+  text-align: left; /* keep the numbered list left-aligned */
+  margin: 0 auto;
+  display: inline-block;
+  text-align: left;
+}
+#main-screen {
+  display: none;
+}
+
+
+    #acceptButton {
+      padding: 14px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      color: white;
+      background: #1473e6;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    #acceptButton:hover {
+      background: #0d66d0;
     }
 
     .upload-container {
@@ -51,8 +95,6 @@
       margin-top: 4px;
     }
 
-    #progress-bar { display: none; }
-
     .template-grid {
       display: flex;
       flex-direction: column;
@@ -83,18 +125,6 @@
       border-radius: 12px;
       z-index: 1;
       transition: transform 0.3s;
-    }
-
-    .template-item p {
-      position: relative;
-      z-index: 2;
-      color: white;
-      font-weight: 600;
-      font-size: 16px;
-      text-shadow: 0 0 5px rgba(0,0,0,0.7);
-      text-align: center;
-      padding: 8px;
-      pointer-events: none;
     }
 
     .template-item:hover {
@@ -152,10 +182,6 @@
       height: 16px;
     }
 
-    #addImagesLabel {
-      font-size: 14px;
-    }
-
     #loading {
       display: none;
       margin: 16px auto;
@@ -166,47 +192,78 @@
 
 <body>
 
-  <div class="upload-container">
-    <label for="pdf-upload" class="upload-button" id="uploadButton">Upload File</label>
-    <input id="pdf-upload" type="file" accept=".pdf, .docx, .txt" />
-    <p id="file-name"></p> <!-- file name will appear here -->
-    <p id="subtext">Files should be PDF, DOCX, or TXT.</p>
-    <img id="loading" src="https://i.pinimg.com/originals/3e/f0/e6/3ef0e69f3c889c1307330c36a501eb12.gif" alt="Loading GIF">
+  <!-- Disclosure screen -->
+  <div id="disclosure-screen" class="visible">
+    <h1>Responsible AI Disclosure</h1>
+    <div id="disclosure">
+      <ol>
+        <li>When using AI tools, you are responsible for how it is used and its impact.</li>
+        <li>Am I comfortable taking full responsibility for the AI's outputs?</li>
+        <li>Am I being fully honest that AI was used?</li>
+        <li>Am I checking for harmful stereotypes or biases?</li>
+        <li>When unchecked, AI may amplify existing biases from internet content that was not fully vetted in its training data.</li>
+        <li>Am I using data, images, and ideas ethically and with permission?</li>
+        <li>Am I considering the environmental cost of heavy AI usage: is my project as efficient as possible?</li>
+        <li>Am I making my AI-enhanced work using a format and language that is accessible to my audience?</li>
+      </ol>
+    </div>
+    <button id="acceptButton">Accept</button>
   </div>
 
-  <div class="template-grid">
-    <div class="template-item" data-template="clarityMinimal">
-        <img src="./clarity minimal.png" alt="Clarity Minimal Template">
+  <!-- Main functional screen -->
+  <div id="main-screen">
+    <div class="upload-container">
+      <label for="pdf-upload" class="upload-button" id="uploadButton">Upload File</label>
+      <input id="pdf-upload" type="file" accept=".pdf, .docx, .txt" />
+      <p id="file-name"></p>
+      <p id="subtext">Files should be PDF, DOCX, or TXT.</p>
+      <img id="loading" src="https://i.pinimg.com/originals/3e/f0/e6/3ef0e69f3c889c1307330c36a501eb12.gif" alt="Loading GIF">
+    </div>
+
+    <div class="template-grid">
+      <div class="template-item" data-template="clarityMinimal">
+          <img src="./clarity minimal.png" alt="Clarity Minimal Template">
       </div>
-    <div class="template-item" data-template="midnightMinimal">
-        <img src="./midnight minimal.png" alt="Template Corporate">
+      <div class="template-item" data-template="midnightMinimal">
+          <img src="./midnight minimal.png" alt="Template Corporate">
+      </div>
+      <div class="template-item" data-template="executiveSlate">
+          <img src="./Executive Slate.png" alt="Template Creative">
+      </div>
+      <div class="template-item" data-template="brightPop">
+          <img src="./Bright Pop.png" alt="Template Creative">
+      </div>
     </div>
-    <div class="template-item" data-template="executiveSlate">
-        <img src="./Executive Slate.png" alt="Template Creative">
+
+    <div id="addImagesContainer">
+      <input type="checkbox" id="addImages" checked />
+      <label for="addImages" id="addImagesLabel">Add Images</label>
     </div>
-    <div class="template-item" data-template="brightPop">
-        <img src="./Bright Pop.png" alt="Template Creative">
-    </div>
+
+    <button id="goButton" class="convert-button" disabled>Convert to Presentation</button>
+
+    <p id="error-message" class="error"></p>
   </div>
-
-  <div id="addImagesContainer">
-    <input type="checkbox" id="addImages" checked /> <!-- checked by default now -->
-    <label for="addImages" id="addImagesLabel">Add Images</label>
-  </div>
-
-  <button id="goButton" class="convert-button" disabled>Convert to Presentation</button>
-
-  <sp-progress-bar id="progress-bar" label="Converting..." progress="0" variant="positive"></sp-progress-bar>
-  <p id="error-message" class="error"></p>
 
   <script>
+    const disclosureScreen = document.getElementById('disclosure-screen');
+    const mainScreen = document.getElementById('main-screen');
+    const acceptButton = document.getElementById('acceptButton');
     const templateItems = document.querySelectorAll('.template-item');
     const goButton = document.getElementById('goButton');
     const uploadButton = document.getElementById('uploadButton');
     const fileInput = document.getElementById('pdf-upload');
     const fileNameDisplay = document.getElementById('file-name');
+    const loadingImage = document.getElementById('loading');
 
     let uploadedFile = null;
+
+    // Accept the disclosure
+    acceptButton.addEventListener('click', () => {
+  document.getElementById('disclosure-screen').style.display = 'none';
+  document.getElementById('main-screen').style.display = 'block';
+});
+
 
     // Template selection
     templateItems.forEach(item => {
@@ -240,12 +297,25 @@
       }
     });
 
-    uploadButton.addEventListener('click', () => {
-      console.log('Upload button clicked.');
-    });
+    // Convert button click
+    goButton.addEventListener('click', () => {
+      if (!uploadedFile) {
+        alert("Please upload a file first.");
+        return;
+      }
 
-    // Make sure addImages is checked on load
-    document.getElementById('addImages').checked = true;
+      loadingImage.style.display = "block";
+      goButton.disabled = true;
+      goButton.textContent = "Processing...";
+
+      // Simulate conversion for now
+      setTimeout(() => {
+        loadingImage.style.display = "none";
+        goButton.disabled = false;
+        goButton.textContent = "Convert to Presentation";
+        alert("Conversion completed!");
+      }, 3000);
+    });
   </script>
 
 </body>

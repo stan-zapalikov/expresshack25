@@ -261,28 +261,24 @@ addOnUISdk.ready.then(async () => {
 
     goButton.addEventListener("click", async (event) => {
         console.log("Clicked Convert!");
-
-        document.querySelectorAll('body > *:not(#loading)').forEach(element => {
-            element.style.display = 'none';
-        });
-        loadingGif.style.display = 'block';
-
+    
+        document.getElementById('main-screen').style.display = 'none'; // Hide main screen
+        loadingGif.style.display = 'block'; // Show loading GIF
+    
         try {
-           // const fileId = await uploadFileToOpenAI(rawUpload);
-            //const outline = await generateOutline(fileId);
-            //outline = JSON.parse(outline)
-            
-            const outline = slidesData
-
+            // const fileId = await uploadFileToOpenAI(rawUpload);
+            // const outline = await generateOutline(fileId);
+            // outline = JSON.parse(outline);
+    
+            const outline = slidesData; // Using static test data for now
             console.log("Generated Outline:", outline);
-
+    
             await sandboxProxy.generatePresentation(outline, themeUsed, addImages);
         } catch (error) {
             console.error("Error generating outline:", error);
         }
-
-
     });
+    
 
     goButton.disabled = true;
 });
