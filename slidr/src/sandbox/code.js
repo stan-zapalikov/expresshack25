@@ -118,10 +118,7 @@ async function createSlides() {
 function start() {
     const sandboxApi = {
         
-        generatePresentation(outline, themeUsed, addImages) {
-            console.log("Received outline:", outline);
-            console.log("Theme:", themeUsed);
-            console.log("Add Images?", addImages);}
+        generatePresentation: () => {createSlides()}
     };
 
     runtime.exposeApi(sandboxApi);
