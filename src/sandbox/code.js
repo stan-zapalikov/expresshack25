@@ -106,7 +106,184 @@ function createBulletPoints(points, theme) {
 
 
 
-
+const presentation = {
+    title: "Gender and Society in East Asia: Early Modern Period",
+    sections: [
+      {
+        section_title: "Formation of Early Modern States",
+        slides: [
+          {
+            slide_type: "section",
+            slide_title: "Formation of Early Modern States",
+            bullet_points: [],
+            accompanyingImageDescription: "A historical map showing the regions of China, Japan, and Korea during the early modern period."
+          },
+          {
+            slide_type: "body",
+            slide_title: "Multicultural Empires and Monarchies",
+            bullet_points: [
+              "Before the 17th century, multicultural empires were dominant.",
+              "Monarchies began to replace empires, forming linguistically cohesive nations.",
+              "Gender and sexuality notions were important in national construction."
+            ],
+            accompanyingImageDescription: "A stock image depicting a historical monarch's court with representatives from different cultures."
+          },
+          {
+            slide_type: "body",
+            slide_title: "Neo-Confucianism in State Formation",
+            bullet_points: [
+              "Neo-Confucianism shaped states of Qing China, Tokugawa Japan, and Chosŏn Korea.",
+              "Governments controlled sexuality and marriages legally.",
+              "Patriarchal powers were strengthened, often equated to a king's authority."
+            ],
+            accompanyingImageDescription: "An artistic representation of a Neo-Confucian scholar writing with traditional scrolls."
+          },
+          {
+            slide_type: "body",
+            slide_title: "Socio-Economic Transformations",
+            bullet_points: [
+              "Economic developments reinforced gender roles and diminished women's economic respect.",
+              "Increased city growth with cultural and economic activities.",
+              "Rise of merchant and artisan classes."
+            ],
+            accompanyingImageDescription: "An animated graphic of bustling marketplaces and trading ports in ancient East Asia."
+          }
+        ]
+      },
+      {
+        section_title: "Gender Roles and Customs in China",
+        slides: [
+          {
+            slide_type: "section",
+            slide_title: "Gender Roles and Customs in China",
+            bullet_points: [],
+            accompanyingImageDescription: "A historical painting depicting traditional Chinese family life in the Ming dynasty."
+          },
+          {
+            slide_type: "body",
+            slide_title: "The Ming and Qing Dynasties",
+            bullet_points: [
+              "Ming dynasty overturned the Mongols but faced scholar-eunuch conflicts.",
+              "Qing dynasty founded by Manchus retaining cultural identities.",
+              "Prohibitions on intermarriage and enforcement of traditional hairstyles."
+            ],
+            accompanyingImageDescription: "A graphic showing Ming and Qing dynasty emperors and traditional costumes."
+          },
+          {
+            slide_type: "body",
+            slide_title: "Confucian Values and Women's Roles",
+            bullet_points: [
+              "Confucian ideas influenced propriety and gender behavior.",
+              "Growth of publishing helped spread Confucian ideals.",
+              "Women faced foot binding prohibitions and Confucian marital values."
+            ],
+            accompanyingImageDescription: "Illustration of women reading Confucian literature in traditional attire."
+          },
+          {
+            slide_type: "body",
+            slide_title: "Impact of Qing Law on Sexual Conduct",
+            bullet_points: [
+              "Qing law rigorously punished illicit sexual conduct and gender misbehaviors.",
+              "Prostitution outlawed and widow's coerced remarriage punished by death.",
+              "Same-sex male sexuality dealt with legal consequences if leading to homicide."
+            ],
+            accompanyingImageDescription: "A dramatic illustration of a Qing courtroom scene."
+          }
+        ]
+      },
+      {
+        section_title: "Gender Dynamics in Korea",
+        slides: [
+          {
+            slide_type: "section",
+            slide_title: "Gender Dynamics in Korea",
+            bullet_points: [],
+            accompanyingImageDescription: "An image showcasing a traditional Korean family setup based on Confucian norms."
+          },
+          {
+            slide_type: "body",
+            slide_title: "Confucian Transformation during Chosŏn Dynasty",
+            bullet_points: [
+              "Buddhism replaced by Neo-Confucianism.",
+              "Women lost inheritance rights and public freedoms.",
+              "Shift from matrilineal to patrilineal marriage systems."
+            ],
+            accompanyingImageDescription: "A timeline diagram showing the transformation from Buddhist to Confucian influence in Korea."
+          },
+          {
+            slide_type: "body",
+            slide_title: "Women's Education and Roles",
+            bullet_points: [
+              "Girls educated in household duties while boys received formal education.",
+              "Hangul creation increased women's literacy.",
+              "Widow remarriage initially banned, affecting women's social roles."
+            ],
+            accompanyingImageDescription: "Stock photo of traditional Korean school setting with students learning Hangul."
+          },
+          {
+            slide_type: "body",
+            slide_title: "Legal and Social Controls",
+            bullet_points: [
+              "Upper-class women faced strict adultery laws.",
+              "Confucian petition system allowed indirect influence in politics.",
+              "Women's household management considered vital, men distanced from domestic duties."
+            ],
+            accompanyingImageDescription: "A painting showing a Confucian scholar advising a Korean family."
+          }
+        ]
+      },
+      {
+        section_title: "Gender and Society in Japan",
+        slides: [
+          {
+            slide_type: "section",
+            slide_title: "Gender and Society in Japan",
+            bullet_points: [],
+            accompanyingImageDescription: "A historical painting of Edo, the capital city during the Tokugawa shogunate."
+          },
+          {
+            slide_type: "body",
+            slide_title: "Tokugawa Japan's Social Structure",
+            bullet_points: [
+              "Civil wars ended with Tokugawa Ieyasu's victory in 1600.",
+              "Society divided into samurai, farmers, artisans, and merchants.",
+              "Daimyo regulated heavily to prevent rebellion."
+            ],
+            accompanyingImageDescription: "A historical depiction of a daimyo with his retainers in feudal Japan."
+          },
+          {
+            slide_type: "body",
+            slide_title: "Gender Roles Across Classes",
+            bullet_points: [
+              "Samurai marriages aimed at producing male heirs, women's status was low.",
+              "In merchant and artisan classes, marriages sometimes were mutual choices.",
+              "Education uneven, girls received limited formal education."
+            ],
+            accompanyingImageDescription: "A collage of different Japanese social classes engaged in daily activities during the Tokugawa period."
+          },
+          {
+            slide_type: "body",
+            slide_title: "Cultural Practices and Sexuality",
+            bullet_points: [
+              "Traditional arts flourished in designated urban zones.",
+              "Same-sex relationships common and culturally accepted, but not legally categorized.",
+              "Marriages strictly regulated, adultery discouraged strongly."
+            ],
+            accompanyingImageDescription: "A kabuki theater performance scene illustrating gender role plays in Tokugawa Japan."
+          }
+        ]
+      }
+    ],
+    end_slide: {
+      slide_type: "body",
+      slide_title: "Concluding Thoughts",
+      bullet_points: [
+        "Explored the impact of Neo-Confucianism on gender roles in East Asia.",
+        "Examined the socio-legal frameworks across China, Korea, and Japan.",
+        "Discussed cultural flourishes and societal changes during the early modern period."
+      ]
+    }
+  };
 
 function start() {
     // APIs to be exposed to the UI runtime
