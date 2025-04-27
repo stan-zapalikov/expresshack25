@@ -63,25 +63,29 @@ let slidesData = {
 const themes = {
     clarityMinimal: {
         titleSlide: {
-            fontSize: 150,
+            fontSize: 100,
             position: { x: 226, y: 287 },
-            color: "#000000"
+            color: "#000000",
+            width: 1500
         },
         sectionSlide: {
-            fontSize: 100,
+            fontSize: 90,
             position: { x: 793, y: 624 },
-            color: "#000000"
+            color: "#000000",
+            width: 1500
         },
         bodySlide: {
             heading: {
-                fontSize: 97,
-                position: { x: 416, y: 131 },
-                color: "#000000"
+                fontSize: 80,
+                position: { x: 416, y: 100 },
+                color: "#000000",
+                width: 1400
             },
             bullets: {
                 fontSize: 34,
                 position: { x: 101, yStart: 413, yStep: 30 },
-                color: "#3D3D3D"
+                color: "#3D3D3D",
+                width: 1200
             }
         }
     },
@@ -89,23 +93,27 @@ const themes = {
         titleSlide: {
             fontSize: 70,
             position: { x: 400, y: 300 },
-            color: "#FFFFFF"
+            color: "#FFFFFF",
+            width: 1500
         },
         sectionSlide: {
             fontSize: 60,
             position: { x: 400, y: 300 },
-            color: "#CCCCCC"
+            color: "#CCCCCC",
+            width: 1500
         },
         bodySlide: {
             heading: {
                 fontSize: 50,
                 position: { x: 100, y: 100 },
-                color: "#FFFFFF"
+                color: "#FFFFFF",
+                width: 1400
             },
             bullets: {
                 fontSize: 24,
                 position: { x: 100, yStart: 200, yStep: 40 },
-                color: "#AAAAAA"
+                color: "#AAAAAA",
+                width: 1200
             }
         }
     },
@@ -113,23 +121,27 @@ const themes = {
         titleSlide: {
             fontSize: 68,
             position: { x: 400, y: 300 },
-            color: "#1C1C1C"
+            color: "#1C1C1C",
+            width: 1500
         },
         sectionSlide: {
             fontSize: 58,
             position: { x: 400, y: 300 },
-            color: "#2F2F2F"
+            color: "#2F2F2F",
+            width: 1500
         },
         bodySlide: {
             heading: {
                 fontSize: 48,
                 position: { x: 90, y: 120 },
-                color: "#222222"
+                color: "#222222",
+                width: 1400
             },
             bullets: {
                 fontSize: 22,
                 position: { x: 90, yStart: 220, yStep: 35 },
-                color: "#333333"
+                color: "#333333",
+                width: 1200
             }
         }
     },
@@ -137,23 +149,27 @@ const themes = {
         titleSlide: {
             fontSize: 72,
             position: { x: 400, y: 300 },
-            color: "#FF5733"
+            color: "#FF5733",
+            width: 1500
         },
         sectionSlide: {
             fontSize: 62,
             position: { x: 400, y: 300 },
-            color: "#FF8C42"
+            color: "#FF8C42",
+            width: 1500
         },
         bodySlide: {
             heading: {
                 fontSize: 52,
                 position: { x: 110, y: 120 },
-                color: "#FF5733"
+                color: "#FF5733",
+                width: 1400
             },
             bullets: {
                 fontSize: 26,
                 position: { x: 110, yStart: 230, yStep: 38 },
-                color: "#C70039"
+                color: "#C70039",
+                width: 1200
             }
         }
     }
@@ -247,14 +263,11 @@ async function createSlides() {
 
 function start() {
     const sandboxApi = {
-        
         generatePresentation: (newSlidesData) => {
             slidesData = newSlidesData;
             createSlides();
         }
-        
     };
-
     runtime.exposeApi(sandboxApi);
 }
 
