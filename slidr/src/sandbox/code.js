@@ -218,6 +218,13 @@ function createSlide(text, bullets) {
     createBulletPoints(bullets);
 }
 
+// sandbox/code.js
+
+
+
+
+
+
 async function createSlides() {
     try {
         // First create a title slide
@@ -227,7 +234,7 @@ async function createSlides() {
         });
         console.log('Created title page');
         createTitle(slidesData.title, "title"); // Specify slide type as "title"
-
+        
         // Now loop through all sections and slides
         for (const section of slidesData.sections) {
             for (const slide of section.slides) {
@@ -236,6 +243,7 @@ async function createSlides() {
                     width: 1920
                 });
                 console.log(`Created page for: ${slide.slide_title}`);
+          
                 createTitle(slide.slide_title, slide.slide_type); // Use slide_type to determine settings
                 createBulletPoints(slide.bullet_points || []);
             }
