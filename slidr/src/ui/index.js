@@ -86,6 +86,10 @@ async function fetchImageAsBase64(imageUrl) {
         reader.readAsDataURL(blob);
     });
 }
+async function fetchImageAsBlob(imageUrl) {
+    const response = await fetch(imageUrl);
+    return await response.blob();
+}
 
 async function enrichSlidesWithImages(slidesOutline) {
     for (const section of slidesOutline.sections) {
@@ -94,9 +98,9 @@ async function enrichSlidesWithImages(slidesOutline) {
                 const imageUrl = await searchPexels(slide.accompanyingImageDescription);
                 if (imageUrl) {
                     try {
-                        const base64Image = await fetchImageAsBase64(imageUrl);
-                        slide.accompanyingImageBase64 = base64Image;
-                        console.log(`Fetched base64 image for "${slide.slide_title}"`);
+                        const blob = await fetchImageAsBlob(imageUrl);
+                        slide.accompanyingImageBlob = blob;   // 🔥 store the Blob directly
+                        console.log(`Fetched blob image for "${slide.slide_title}"`);
                     } catch (e) {
                         console.warn(`Failed to fetch image for "${slide.slide_title}"`, e);
                     }
@@ -107,6 +111,7 @@ async function enrichSlidesWithImages(slidesOutline) {
         }
     }
 }
+
 
 
 
@@ -313,13 +318,13 @@ addOnUISdk.ready.then(async () => {
         
     
         try {
-            //const fileId = await uploadFileToOpenAI(rawUpload);
-            //const outline = await generateOutline(fileId);
+            const fileId = await uploadFileToOpenAI(rawUpload);
+            const outline = await generateOutline(fileId);
             
     
-            const outline = slidesData; // Using static test data for now
+            //const outline = slidesData; // Using static test data for now
             console.log("Generated Outline:", outline);
-            //await enrichSlidesWithImages(outline);  // <- block here, wait for all image urls to be added
+            await enrichSlidesWithImages(outline);  // <- block here, wait for all image urls to be added
 
             console.log("Generated Outline with images:", outline);
             await sandboxProxy.generatePresentation(outline, themeUsed, addImages);
