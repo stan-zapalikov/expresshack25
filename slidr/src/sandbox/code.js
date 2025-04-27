@@ -60,6 +60,108 @@ let slidesData = {
     ]
 };
 
+const themes = {
+    clarityMinimal: {
+        titleSlide: {
+            fontSize: 150,
+            position: { x: 226, y: 287 },
+            color: "#000000"
+        },
+        sectionSlide: {
+            fontSize: 100,
+            position: { x: 793, y: 624 },
+            color: "#000000"
+        },
+        bodySlide: {
+            heading: {
+                fontSize: 97,
+                position: { x: 416, y: 131 },
+                color: "#000000"
+            },
+            bullets: {
+                fontSize: 34,
+                position: { x: 101, yStart: 413, yStep: 30 },
+                color: "#3D3D3D"
+            }
+        }
+    },
+    midnightMinimal: {
+        titleSlide: {
+            fontSize: 70,
+            position: { x: 400, y: 300 },
+            color: "#FFFFFF"
+        },
+        sectionSlide: {
+            fontSize: 60,
+            position: { x: 400, y: 300 },
+            color: "#CCCCCC"
+        },
+        bodySlide: {
+            heading: {
+                fontSize: 50,
+                position: { x: 100, y: 100 },
+                color: "#FFFFFF"
+            },
+            bullets: {
+                fontSize: 24,
+                position: { x: 100, yStart: 200, yStep: 40 },
+                color: "#AAAAAA"
+            }
+        }
+    },
+    executiveSlate: {
+        titleSlide: {
+            fontSize: 68,
+            position: { x: 400, y: 300 },
+            color: "#1C1C1C"
+        },
+        sectionSlide: {
+            fontSize: 58,
+            position: { x: 400, y: 300 },
+            color: "#2F2F2F"
+        },
+        bodySlide: {
+            heading: {
+                fontSize: 48,
+                position: { x: 90, y: 120 },
+                color: "#222222"
+            },
+            bullets: {
+                fontSize: 22,
+                position: { x: 90, yStart: 220, yStep: 35 },
+                color: "#333333"
+            }
+        }
+    },
+    brightPop: {
+        titleSlide: {
+            fontSize: 72,
+            position: { x: 400, y: 300 },
+            color: "#FF5733"
+        },
+        sectionSlide: {
+            fontSize: 62,
+            position: { x: 400, y: 300 },
+            color: "#FF8C42"
+        },
+        bodySlide: {
+            heading: {
+                fontSize: 52,
+                position: { x: 110, y: 120 },
+                color: "#FF5733"
+            },
+            bullets: {
+                fontSize: 26,
+                position: { x: 110, yStart: 230, yStep: 38 },
+                color: "#C70039"
+            }
+        }
+    }
+};
+
+// THEME SELECTION
+const selectedTheme = themes.clarityMinimal; // Change this to switch themes
+
 async function createTitle(text) {
     const textNode = editor.createText();
     textNode.fullContent.text = text; // Set the text content first
@@ -69,12 +171,15 @@ async function createTitle(text) {
 
     // Apply character styles including font, size, and color
     textNode.fullContent.applyCharacterStyles({
-        fontSize: 97,
-        color: colorUtils.fromHex("#000000")
+        fontSize: selectedTheme.titleSlide.fontSize,
+        color: colorUtils.fromHex(selectedTheme.titleSlide.color) // Set the text color to a HEX value
     });
 
     const insertionParent = editor.context.insertionParent;
-    textNode.setPositionInParent({ x: 100, y: 150 }, textNode.topLeftLocal);
+    textNode.setPositionInParent({ 
+        x: selectedTheme.titleSlide.position.x, 
+        y: selectedTheme.titleSlide.position.y }, 
+        textNode.topLeftLocal);
     insertionParent.children.append(textNode);
     console.log("Text Node Added: ", textNode);
 }
@@ -86,12 +191,15 @@ function createBulletPoints(textArray) {
 
         // Apply character styles including font size and color
         textNode.fullContent.applyCharacterStyles({
-            fontSize: 34,
-            color: colorUtils.fromHex("#3D3D3D") // Set the text color to a HEX value
+            fontSize: selectedTheme.bodySlide.bullets.fontSize,
+            color: colorUtils.fromHex(selectedTheme.bodySlide.bullets.color) // Set the text color to a HEX value
         });
 
         const insertionParent = editor.context.insertionParent;
-        textNode.setPositionInParent({ x: 100, y: 200 + (i * 30) }, textNode.topLeftLocal);
+        textNode.setPositionInParent({ 
+            x: selectedTheme.bodySlide.bullets.position.x, 
+            y: selectedTheme.bodySlide.bullets.position.yStart + (i * selectedTheme.bodySlide.bullets.position.yStep) 
+        }, textNode.topLeftLocal);
         insertionParent.children.append(textNode);
     }
 }
