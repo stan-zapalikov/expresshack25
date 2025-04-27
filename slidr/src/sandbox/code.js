@@ -88,15 +88,20 @@ const themes = {
         bodySlide: {
             heading: {
                 fontSize: 80,
-                position: { x: 416, y: 100 },
+                position: { x: 100, y: 100 }, // Left side
                 color: "#000000",
-                width: 1400
+                width: 800
             },
             bullets: {
                 fontSize: 34,
-                position: { x: 300, yStart: 413, yStep: 90 },
+                position: { x: 300, yStart: 500, yStep: 90 }, // Left side
                 color: "#3D3D3D",
-                width: 1200
+                width: 800
+            },
+            image: {
+                position: { x: 1920 - 800 - 100, y: 100 }, // Top right
+                maxWidth: 800,
+                maxHeight: 800
             }
         }
     },
@@ -105,85 +110,100 @@ const themes = {
         titleSlide: {
             fontSize: 100,
             position: { x: 226, y: 287 },
-            color: "#FFFFFF", // white for dark mode
+            color: "#FFFFFF",
             width: 1500
         },
         sectionSlide: {
             fontSize: 90,
             position: { x: 793, y: 624 },
-            color: "#FFFFFF", // white for dark mode
+            color: "#FFFFFF",
             width: 1500
         },
         bodySlide: {
             heading: {
                 fontSize: 80,
-                position: { x: 416, y: 100 },
-                color: "#FFFFFF", // white for dark mode
-                width: 1400
+                position: { x: 100, y: 100 },
+                color: "#FFFFFF",
+                width: 800
             },
             bullets: {
                 fontSize: 34,
-                position: { x: 300, yStart: 413, yStep: 90 },
-                color: "#CCCCCC", // light gray for dark mode
-                width: 1200
+                position: { x: 300, yStart: 500, yStep: 90 },
+                color: "#CCCCCC",
+                width: 800
+            },
+            image: {
+                position: { x: 1920 - 800 - 100, y: 100 }, // Top right
+                maxWidth: 800,
+                maxHeight: 800
             }
         }
     },
     executiveSlate: {
-        backgroundColor: "#232946", // deep blue
+        backgroundColor: "#232946",
         titleSlide: {
             fontSize: 100,
             position: { x: 226, y: 287 },
-            color: "#F4D35E", // gold
+            color: "#F4D35E",
             width: 1500
         },
         sectionSlide: {
             fontSize: 90,
             position: { x: 793, y: 624 },
-            color: "#F4D35E", // gold
+            color: "#F4D35E",
             width: 1500
         },
         bodySlide: {
             heading: {
                 fontSize: 80,
-                position: { x: 416, y: 100 },
-                color: "#F4D35E", // gold
-                width: 1400
+                position: { x: 100, y: 100 },
+                color: "#F4D35E",
+                width: 800
             },
             bullets: {
                 fontSize: 34,
-                position: { x: 300, yStart: 413, yStep: 90 },
-                color: "#E7ECEF", // light blue-gray
-                width: 1200
+                position: { x: 300, yStart: 500, yStep: 90 },
+                color: "#E7ECEF",
+                width: 800
+            },
+            image: {
+                position: { x: 1920 - 800 - 100, y: 100 }, // Top right
+                maxWidth: 800,
+                maxHeight: 800
             }
         }
     },
     brightPop: {
-        backgroundColor: "#FFF6F0", // light peach
+        backgroundColor: "#FFF6F0",
         titleSlide: {
             fontSize: 100,
             position: { x: 226, y: 287 },
-            color: "#FF5733", // bright orange-red
+            color: "#FF5733",
             width: 1500
         },
         sectionSlide: {
             fontSize: 90,
             position: { x: 793, y: 624 },
-            color: "#FF8C42", // orange
+            color: "#FF8C42",
             width: 1500
         },
         bodySlide: {
             heading: {
                 fontSize: 80,
-                position: { x: 416, y: 100 },
-                color: "#FF5733", // bright orange-red
-                width: 1400
+                position: { x: 100, y: 100 },
+                color: "#FF5733",
+                width: 800
             },
             bullets: {
                 fontSize: 34,
-                position: { x: 300, yStart: 413, yStep: 90 },
-                color: "#C70039", // magenta
-                width: 1200
+                position: { x: 300, yStart: 500, yStep: 90 },
+                color: "#C70039",
+                width: 800
+            },
+            image: {
+                position: { x: 1920 - 800 - 100, y: 100 }, // Top right
+                maxWidth: 800,
+                maxHeight: 800
             }
         }
     }
@@ -271,7 +291,7 @@ function createBulletPoints(textArray) {
             circle.rx = circleRadius;
             circle.ry = circleRadius;
             circle.fill = editor.makeColorFill(colorUtils.fromHex(selectedTheme.bodySlide.bullets.color));
-            circle.setPositionInParent({ x: x - 150, y: (y + selectedTheme.bodySlide.bullets.fontSize / 2) - 10 }, { x: 0, y: 0 }); // Only the circle moves back
+            circle.setPositionInParent({ x: x - 250, y: (y + selectedTheme.bodySlide.bullets.fontSize / 2) - 10 }, { x: 0, y: 0 }); // Only the circle moves back
 
             // Append both nodes to the current insertion parent
             editor.context.insertionParent.children.append(circle, textNode);
@@ -344,8 +364,8 @@ async function createSlides() {
                             console.log('bitmapImage dimensions:', originalWidth, originalHeight);
                             const aspectRatio = originalWidth / originalHeight;
                             // Artboard max dimensions
-                            const maxWidth = 850;
-                            const maxHeight = 600;
+                            const maxWidth = selectedTheme.bodySlide.image.maxWidth;
+                            const maxHeight = selectedTheme.bodySlide.image.maxHeight;
                             let width = originalWidth;
                             let height = originalHeight;
                             // Scale down to fit max dimensions, maintaining aspect ratio
@@ -372,6 +392,7 @@ async function createSlides() {
                                     console.error('Failed to create mediaContainerNode.');
                                     return;
                                 }
+                                mediaContainerNode.setPositionInParent(selectedTheme.bodySlide.image.position, mediaContainerNode.topLeftLocal);
                                 insertionParent.children.append(mediaContainerNode);
                                 console.log('mediaContainerNode appended to insertionParent');
                             });
