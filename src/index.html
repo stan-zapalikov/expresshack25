@@ -2,9 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>PDF to Presentation Add-on</title>
+  <title>PDF to Presentation</title>
 
-  <!-- Spectrum bundle -->
   <script src="https://jspm.dev/@spectrum-web-components/bundle"></script>
   <script type="module" src="./ui/index.js"></script>
 
@@ -12,95 +11,73 @@
     body {
       font-family: 'Adobe Clean', sans-serif;
       padding: 16px;
-      background-color: var(--spectrum-global-color-gray-50);
+      background: var(--spectrum-global-color-gray-50);
       color: var(--spectrum-global-color-gray-900);
       max-width: 400px;
-      margin: 0 auto;
+      margin: auto;
     }
-
-    .upload-container {
-      margin-bottom: 16px;
-    }
-
-    #pdf-upload {
+    .upload-container { margin-bottom: 16px; }
+    #pdf-upload { display: none; }
+    #file-name {
       display: none;
+      margin-top: 8px;
+      font-size: 12px;
+      background: var(--spectrum-global-color-gray-100);
+      padding: 4px 8px;
+      border-radius: 4px;
     }
-
     .error {
       color: var(--spectrum-global-color-red-600);
       font-size: 12px;
       margin-top: 4px;
     }
-
-    #progress-bar {
-      display: none;
-    }
-
+    #progress-bar { display: none; }
     .template-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 10px;
       margin-bottom: 16px;
     }
-
     .template-item {
       cursor: pointer;
       padding: 4px;
-      background-color: var(--spectrum-global-color-gray-100);
+      background: var(--spectrum-global-color-gray-100);
       border-radius: 4px;
     }
-
     .template-item.selected img {
       transform: scale(1.05);
       outline: 3px solid #1473e6;
     }
-
     .template-item img {
       width: 100%;
       height: 100px;
       object-fit: cover;
     }
-
-    .upload-button,
-    .convert-button {
+    .upload-button, .convert-button {
       display: block;
       width: 100%;
-      text-align: center;
       padding: 10px;
-      background-color: #1473e6;
-      color: white;
+      margin-top: 12px;
+      font-size: 14px;
+      text-align: center;
+      background: #1473e6;
+      color: #fff;
       border: none;
       border-radius: 4px;
       cursor: pointer;
-      font-size: 14px;
-      margin-top: 12px;
       box-sizing: border-box;
     }
-
-    .upload-button:hover,
-    .convert-button:hover {
-      background-color: #0d66d0;
-    }
-
+    .upload-button:hover, .convert-button:hover { background: #0d66d0; }
     .convert-button:disabled {
-      background-color: #c1c1c1;
+      background: #c1c1c1;
       cursor: not-allowed;
-    }
-
-    #file-name {
-      display: none;
-      margin-top: 8px;
-      font-size: 12px;
-      background-color: var(--spectrum-global-color-gray-100);
-      padding: 4px 8px;
-      border-radius: 4px;
     }
   </style>
 </head>
 
 <body>
   <div class="upload-container">
-    <label for="pdf-upload" class="upload-button">Upload PDF</label>
+    <label for="pdf-upload" class="upload-button" id="upload-button">Upload PDF</label>
     <input id="pdf-upload" type="file" accept="application/pdf" />
     <p id="file-name"></p>
   </div>
@@ -124,9 +101,7 @@
     </div>
   </div>
 
-  <!-- ✅ Replaced <sp-button> with native button -->
   <button id="go-button" class="convert-button" disabled>Convert to Presentation</button>
-
   <sp-progress-bar id="progress-bar" label="Converting..." progress="0" variant="positive"></sp-progress-bar>
   <p id="error-message" class="error"></p>
 </body>
