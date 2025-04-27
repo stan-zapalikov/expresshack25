@@ -4,7 +4,7 @@ import { editor } from "express-document-sdk";
 // Get the document sandbox runtime.
 const { runtime } = addOnSandboxSdk.instance;
 
-const themes = {
+/*const themes = {
     clarityMinimal: {
         fontSize: {
             title: 50,
@@ -89,7 +89,7 @@ function createTitle(text, theme) {
     insertionParent.children.append(textNode);
 }
 
-function createBulletPoints(points, theme) {
+/*function createBulletPoints(points, theme) {
     const insertionParent = editor.context.insertionParent;
     let y = 200; // Start lower than the title
 
@@ -103,6 +103,71 @@ function createBulletPoints(points, theme) {
         insertionParent.children.append(bullet);
     });
 }
+
+function createPresentation(presentationData, themeName) {
+    const theme = themes[themeName];
+
+    // Create a title slide first
+    createTitle(presentationData.title, theme);
+
+    presentationData.sections.forEach(section => {
+        section.slides.forEach(slide => {
+            if (slide.slide_type === "section") {
+                createSectionSlide(slide, theme);
+            } else if (slide.slide_type === "body") {
+                createBodySlide(slide, theme);
+            } else {
+                console.warn("Unknown slide type:", slide.slide_type);
+            }
+        });
+    });
+
+    // Create end slide if present
+    if (presentationData.end_slide) {
+        createBodySlide(presentationData.end_slide, theme);
+    }
+}
+
+function createSectionSlide(slideData, theme) {
+    // Clear artboard or create a new one if needed here
+
+    createTitle(slideData.slide_title, theme);
+    // You could optionally create an image based on slideData.accompanyingImageDescription
+}
+
+function createBodySlide(slideData, theme) {
+    createTitle(slideData.slide_title, theme);
+    createBulletPoints(slideData.bullet_points, theme);
+    // Optionally, createImage(slideData.accompanyingImageDescription);
+}
+
+function createTitle(text, theme) {
+    const textNode = editor.createText();
+    textNode.fullContent.text = text;
+    textNode.fullContent.applyCharacterStyles({ fontSize: theme.fontSize.title });
+
+    const insertionParent = editor.context.insertionParent;
+    textNode.fill = editor.makeColorFill(theme.color.title);
+
+    textNode.setPositionInParent({ x: 50, y: theme.spacing.titleTopMargin }, textNode.topLeftLocal);
+    insertionParent.children.append(textNode);
+}
+
+function createBulletPoints(points, theme) {
+    const insertionParent = editor.context.insertionParent;
+    let y = 200; // Start a little lower under the title
+
+    points.forEach((point, index) => {
+        const bullet = editor.createText();
+        bullet.fullContent.text = `• ${point}`;
+        bullet.fullContent.applyCharacterStyles({ fontSize: theme.fontSize.bullet });
+        bullet.fill = editor.makeColorFill(theme.color.bullet);
+
+        bullet.setPositionInParent({ x: 80, y: y + index * theme.spacing.bulletSpacing }, bullet.topLeftLocal);
+        insertionParent.children.append(bullet);
+    });
+} 
+
 
 
 
@@ -283,33 +348,15 @@ const presentation = {
         "Discussed cultural flourishes and societal changes during the early modern period."
       ]
     }
-  };
+  }; */
 
 function start() {
+    console.log("Sandbox runtime started.");
     // APIs to be exposed to the UI runtime
     // i.e., to the `index.html` file of this add-on.
     const sandboxApi = {
-        createRectangle: () => {
-            const rectangle = editor.createRectangle();
-
-            // Define rectangle dimensions.
-            rectangle.width = 240;
-            rectangle.height = 180;
-
-            // Define rectangle position.
-            rectangle.translation = { x: 10, y: 10 };
-
-            // Define rectangle color.
-            const color = { red: 0.32, green: 0.34, blue: 0.89, alpha: 1 };
-
-            // Fill the rectangle with the color.
-            const rectangleFill = editor.makeColorFill(color);
-            rectangle.fill = rectangleFill;
-
-            // Add the rectangle to the document.
-            const insertionParent = editor.context.insertionParent;
-            insertionParent.children.append(rectangle);
-        }
+        //createPresentationSlides: ()=> {createTitle(presentation.title, themes.clarityMinimal);},
+        createPresentationSlides: () => console.log("Creating presentation slides..."),
     };
 
     // Expose `sandboxApi` to the UI runtime.
