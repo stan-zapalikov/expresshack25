@@ -50,7 +50,7 @@ const slidesData = {
 };
 
 export async function searchPexels(query) {
-    const url = `https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=1&orientation=landscape`;
+    const url = `https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=1&orientation=landscape&size=medium`;
 
 
     try {
@@ -76,14 +76,30 @@ export async function searchPexels(query) {
     }
 }
 
+async function fetchImageAsBase64(imageUrl) {
+    const response = await fetch(imageUrl);
+    const blob = await response.blob();
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+    });
+}
+
 async function enrichSlidesWithImages(slidesOutline) {
     for (const section of slidesOutline.sections) {
         for (const slide of section.slides) {
             if (slide.accompanyingImageDescription && slide.accompanyingImageDescription.trim() !== "") {
                 const imageUrl = await searchPexels(slide.accompanyingImageDescription);
                 if (imageUrl) {
-                    slide.accompanyingImageUrl = imageUrl;
-                    console.log(`Found image for "${slide.slide_title}": ${imageUrl}`);
+                    try {
+                        const base64Image = await fetchImageAsBase64(imageUrl);
+                        slide.accompanyingImageBase64 = base64Image;
+                        console.log(`Fetched base64 image for "${slide.slide_title}"`);
+                    } catch (e) {
+                        console.warn(`Failed to fetch image for "${slide.slide_title}"`, e);
+                    }
                 } else {
                     console.warn(`No image found for "${slide.slide_title}".`);
                 }
@@ -91,6 +107,7 @@ async function enrichSlidesWithImages(slidesOutline) {
         }
     }
 }
+
 
 
 
@@ -296,13 +313,13 @@ addOnUISdk.ready.then(async () => {
         
     
         try {
-            const fileId = await uploadFileToOpenAI(rawUpload);
-            const outline = await generateOutline(fileId);
+            //const fileId = await uploadFileToOpenAI(rawUpload);
+            //const outline = await generateOutline(fileId);
             
     
-            //const outline = slidesData; // Using static test data for now
+            const outline = slidesData; // Using static test data for now
             console.log("Generated Outline:", outline);
-            await enrichSlidesWithImages(outline);  // <- block here, wait for all image urls to be added
+            //await enrichSlidesWithImages(outline);  // <- block here, wait for all image urls to be added
 
             console.log("Generated Outline with images:", outline);
             await sandboxProxy.generatePresentation(outline, themeUsed, addImages);
