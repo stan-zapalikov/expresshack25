@@ -129,59 +129,59 @@ const themes = {
         }
     },
     executiveSlate: {
-        backgroundColor: "#F4F4F4",
+        backgroundColor: "#232946", // deep blue
         titleSlide: {
-            fontSize: 68,
-            position: { x: 400, y: 300 },
-            color: "#1C1C1C",
+            fontSize: 100,
+            position: { x: 226, y: 287 },
+            color: "#F4D35E", // gold
             width: 1500
         },
         sectionSlide: {
-            fontSize: 58,
-            position: { x: 400, y: 300 },
-            color: "#2F2F2F",
+            fontSize: 90,
+            position: { x: 793, y: 624 },
+            color: "#F4D35E", // gold
             width: 1500
         },
         bodySlide: {
             heading: {
-                fontSize: 48,
-                position: { x: 90, y: 120 },
-                color: "#222222",
+                fontSize: 80,
+                position: { x: 416, y: 100 },
+                color: "#F4D35E", // gold
                 width: 1400
             },
             bullets: {
-                fontSize: 22,
-                position: { x: 90, yStart: 220, yStep: 35 },
-                color: "#333333",
+                fontSize: 34,
+                position: { x: 300, yStart: 413, yStep: 90 },
+                color: "#E7ECEF", // light blue-gray
                 width: 1200
             }
         }
     },
     brightPop: {
-        backgroundColor: "#FFF6F0",
+        backgroundColor: "#FFF6F0", // light peach
         titleSlide: {
-            fontSize: 72,
-            position: { x: 400, y: 300 },
-            color: "#FF5733",
+            fontSize: 100,
+            position: { x: 226, y: 287 },
+            color: "#FF5733", // bright orange-red
             width: 1500
         },
         sectionSlide: {
-            fontSize: 62,
-            position: { x: 400, y: 300 },
-            color: "#FF8C42",
+            fontSize: 90,
+            position: { x: 793, y: 624 },
+            color: "#FF8C42", // orange
             width: 1500
         },
         bodySlide: {
             heading: {
-                fontSize: 52,
-                position: { x: 110, y: 120 },
-                color: "#FF5733",
+                fontSize: 80,
+                position: { x: 416, y: 100 },
+                color: "#FF5733", // bright orange-red
                 width: 1400
             },
             bullets: {
-                fontSize: 26,
-                position: { x: 110, yStart: 230, yStep: 38 },
-                color: "#C70039",
+                fontSize: 34,
+                position: { x: 300, yStart: 413, yStep: 90 },
+                color: "#C70039", // magenta
                 width: 1200
             }
         }
@@ -189,7 +189,7 @@ const themes = {
 };
 
 // THEME SELECTION
-const selectedTheme = themes.midnightMinimal; // Change this to switch themes
+const selectedTheme = themes.brightPop; // Change this to switch themes
 
 function createTitle(text, slideType) {
     const textNode = editor.createText();
