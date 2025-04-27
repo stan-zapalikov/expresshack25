@@ -162,24 +162,33 @@ const themes = {
 // THEME SELECTION
 const selectedTheme = themes.clarityMinimal; // Change this to switch themes
 
-async function createTitle(text) {
+function createTitle(text, slideType) {
     const textNode = editor.createText();
     textNode.fullContent.text = text; // Set the text content first
 
-    // Get the font object for Adobe Garamond Pro
-
+    let slideSettings;
+    if (slideType === "title") {
+        slideSettings = selectedTheme.titleSlide;
+    } else if (slideType === "section") {
+        slideSettings = selectedTheme.sectionSlide;
+    } else if (slideType === "body") {
+        slideSettings = selectedTheme.bodySlide.heading;
+    } else {
+        console.error("Invalid slide type provided: ", slideType);
+        return;
+    }
 
     // Apply character styles including font, size, and color
     textNode.fullContent.applyCharacterStyles({
-        fontSize: selectedTheme.titleSlide.fontSize,
-        color: colorUtils.fromHex(selectedTheme.titleSlide.color) // Set the text color to a HEX value
+        fontSize: slideSettings.fontSize,
+        color: colorUtils.fromHex(slideSettings.color) // Set the text color to a HEX value
     });
 
     const insertionParent = editor.context.insertionParent;
     textNode.setPositionInParent({ 
-        x: selectedTheme.titleSlide.position.x, 
-        y: selectedTheme.titleSlide.position.y }, 
-        textNode.topLeftLocal);
+        x: slideSettings.position.x, 
+        y: slideSettings.position.y 
+    }, textNode.topLeftLocal);
     insertionParent.children.append(textNode);
     console.log("Text Node Added: ", textNode);
 }
@@ -217,7 +226,7 @@ async function createSlides() {
             width: 1920
         });
         console.log('Created title page');
-        createSlide(slidesData.title, []); // Only title, no bullets on first slide
+        createTitle(slidesData.title, "title"); // Specify slide type as "title"
 
         // Now loop through all sections and slides
         for (const section of slidesData.sections) {
@@ -227,7 +236,8 @@ async function createSlides() {
                     width: 1920
                 });
                 console.log(`Created page for: ${slide.slide_title}`);
-                createSlide(slide.slide_title, slide.bullet_points || []);
+                createTitle(slide.slide_title, slide.slide_type); // Use slide_type to determine settings
+                createBulletPoints(slide.bullet_points || []);
             }
         }
     } catch (error) {
