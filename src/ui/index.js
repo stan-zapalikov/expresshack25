@@ -14,7 +14,7 @@
     const goBtn = $("go-button");
     const progress = $("progress-bar");
     const error = $("error-message");
-
+    goBtn.addEventListener("click",console.log("bruh"))
     let pdfFile = null, selectedTemplate = "", isProcessing = false;
 
     const showError = (msg) => { error.textContent = msg; error.style.display = "block"; };
@@ -80,13 +80,7 @@
         updateGoBtn();
       }
     };
-
-    $("go-button")?.addEventListener("click", async () => {
-      await sandbox.createPresentationSlides();
-    })
-
-    $("createRectangle")?.addEventListener("click", async () => {
-      await sandbox.createRectangle();
-    });
+    
+   
   } catch {}
 })();

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pexels API Search Test</title>
+</head>
+<body>
+  <h1>Pexels Image Search</h1>
+  <input type="text" id="searchInput" placeholder="Enter search term" />
+  <button onclick="handleSearch()">Search</button>
+
+  <h2>Result:</h2>
+  <img id="resultImage" src="" alt="Image will appear here" style="max-width: 500px; display: none;" />
+  <p id="imageUrl"></p>
+
+  <script>
+    async function searchPexels(query) {
+      const apiKey = 'xYtHEgswNSaMTj5o6fRqy4RetJIrYTAOhzB3ZKt7UxAjnXpmcdWMVnHb'; // <<<--- replace this with your Pexels API Key
+      const url = `https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=1`;
+
+      try {
+        const response = await fetch(url, {
+          headers: {
+            Authorization: apiKey
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        if (data.photos && data.photos.length > 0) {
+          return data.photos[0].src.original;
+        } else {
+          return null;
+        }
+      } catch (error) {
+        console.error('Error fetching from Pexels:', error);
+        return null;
+      }
+    }
+
+    async function handleSearch() {
+      const query = document.getElementById('searchInput').value;
+      const imageUrl = await searchPexels(query);
+
+      const img = document.getElementById('resultImage');
+      const urlText = document.getElementById('imageUrl');
+
+      if (imageUrl) {
+        img.src = imageUrl;
+        img.style.display = 'block';
+        urlText.textContent = imageUrl;
+      } else {
+        img.style.display = 'none';
+        urlText.textContent = 'No image found.';
+      }
+    }
+  </script>
+</body>
+</html>

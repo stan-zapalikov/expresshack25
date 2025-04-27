@@ -77,19 +77,36 @@ const themes = {
     },
 };
 
-function createTitle(text, theme) {
-    const textNode = editor.createText();
-    textNode.fullContent.text = text;
-    textNode.fullContent.applyCharacterStyles({ fontSize: theme.fontSize.title });
+async function searchPexels(query) {
+    const apiKey = 'xYtHEgswNSaMTj5o6fRqy4RetJIrYTAOhzB3ZKt7UxAjnXpmcdWMVnHb'; // <<<--- replace this with your Pexels API Key
+    const url = `https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=1`;
 
-    const insertionParent = editor.context.insertionParent;
-    textNode.fill = editor.makeColorFill(theme.color.title);
+    try {
+      const response = await fetch(url, {
+        headers: {
+          Authorization: apiKey
+        }
+      });
 
-    textNode.setPositionInParent({ x: 50, y: theme.spacing.titleTopMargin }, textNode.topLeftLocal);
-    insertionParent.children.append(textNode);
-}
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
 
-/*function createBulletPoints(points, theme) {
+      const data = await response.json();
+      if (data.photos && data.photos.length > 0) {
+        return data.photos[0].src.original;
+      } else {
+        return null;
+      }
+    } catch (error) {
+      console.error('Error fetching from Pexels:', error);
+      return null;
+    }
+  }
+
+
+
+function createBulletPoints(points, theme) {
     const insertionParent = editor.context.insertionParent;
     let y = 200; // Start lower than the title
 
@@ -103,72 +120,6 @@ function createTitle(text, theme) {
         insertionParent.children.append(bullet);
     });
 }
-
-function createPresentation(presentationData, themeName) {
-    const theme = themes[themeName];
-
-    // Create a title slide first
-    createTitle(presentationData.title, theme);
-
-    presentationData.sections.forEach(section => {
-        section.slides.forEach(slide => {
-            if (slide.slide_type === "section") {
-                createSectionSlide(slide, theme);
-            } else if (slide.slide_type === "body") {
-                createBodySlide(slide, theme);
-            } else {
-                console.warn("Unknown slide type:", slide.slide_type);
-            }
-        });
-    });
-
-    // Create end slide if present
-    if (presentationData.end_slide) {
-        createBodySlide(presentationData.end_slide, theme);
-    }
-}
-
-function createSectionSlide(slideData, theme) {
-    // Clear artboard or create a new one if needed here
-
-    createTitle(slideData.slide_title, theme);
-    // You could optionally create an image based on slideData.accompanyingImageDescription
-}
-
-function createBodySlide(slideData, theme) {
-    createTitle(slideData.slide_title, theme);
-    createBulletPoints(slideData.bullet_points, theme);
-    // Optionally, createImage(slideData.accompanyingImageDescription);
-}
-
-function createTitle(text, theme) {
-    const textNode = editor.createText();
-    textNode.fullContent.text = text;
-    textNode.fullContent.applyCharacterStyles({ fontSize: theme.fontSize.title });
-
-    const insertionParent = editor.context.insertionParent;
-    textNode.fill = editor.makeColorFill(theme.color.title);
-
-    textNode.setPositionInParent({ x: 50, y: theme.spacing.titleTopMargin }, textNode.topLeftLocal);
-    insertionParent.children.append(textNode);
-}
-
-function createBulletPoints(points, theme) {
-    const insertionParent = editor.context.insertionParent;
-    let y = 200; // Start a little lower under the title
-
-    points.forEach((point, index) => {
-        const bullet = editor.createText();
-        bullet.fullContent.text = `• ${point}`;
-        bullet.fullContent.applyCharacterStyles({ fontSize: theme.fontSize.bullet });
-        bullet.fill = editor.makeColorFill(theme.color.bullet);
-
-        bullet.setPositionInParent({ x: 80, y: y + index * theme.spacing.bulletSpacing }, bullet.topLeftLocal);
-        insertionParent.children.append(bullet);
-    });
-} 
-
-
 
 
 const presentation = {
@@ -348,16 +299,45 @@ const presentation = {
         "Discussed cultural flourishes and societal changes during the early modern period."
       ]
     }
-  }; */
+  };
 
 function start() {
-    console.log("Sandbox runtime started.");
     // APIs to be exposed to the UI runtime
     // i.e., to the `index.html` file of this add-on.
     const sandboxApi = {
-        createPresentationSlides: ()=> {createTitle(presentation.title, themes.clarityMinimal);},
-    };
+        createRectangle: () => {
+            const rectangle = editor.createRectangle();
 
+            // Define rectangle dimensions.
+            rectangle.width = 240;
+            rectangle.height = 180;
+
+            // Define rectangle position.
+            rectangle.translation = { x: 10, y: 10 };
+
+            // Define rectangle color.
+            const color = { red: 0.32, green: 0.34, blue: 0.89, alpha: 1 };
+
+            // Fill the rectangle with the color.
+            const rectangleFill = editor.makeColorFill(color);
+            rectangle.fill = rectangleFill;
+
+            // Add the rectangle to the document.
+            const insertionParent = editor.context.insertionParent;
+            insertionParent.children.append(rectangle);
+        },
+    
+    createTitle:(text, theme)=> {
+        const textNode = editor.createText();
+        textNode.fullContent.text = text;
+        textNode.fullContent.applyCharacterStyles({ fontSize: theme.fontSize.title });
+    
+        const insertionParent = editor.context.insertionParent;
+        textNode.fill = editor.makeColorFill(theme.color.title);
+    
+        textNode.setPositionInParent({ x: 50, y: theme.spacing.titleTopMargin }, textNode.topLeftLocal);
+        insertionParent.children.append(textNode);
+    }}
     // Expose `sandboxApi` to the UI runtime.
     runtime.exposeApi(sandboxApi);
 }
